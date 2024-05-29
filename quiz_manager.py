@@ -38,28 +38,14 @@ class QuizManager:
     
     def next_question_index(self, direction=1):
         """
-        Task: Adjust the current quiz question index based on the specified direction.
+        Adjusts the current quiz question index based on the specified direction.
 
-        Overview:
-        Develop a method to navigate to the next or previous quiz question by adjusting the `question_index` in Streamlit's session state. This method should account for wrapping, meaning if advancing past the last question or moving before the first question, it should continue from the opposite end.
-
-        Instructions:
-        1. Retrieve the current question index from Streamlit's session state.
-        2. Adjust the index based on the provided `direction` (1 for next, -1 for previous), using modulo arithmetic to wrap around the total number of questions.
-        3. Update the `question_index` in Streamlit's session state with the new, valid index.
-            # st.session_state["question_index"] = new_index
-
-        Parameters:
-        - direction: An integer indicating the direction to move in the quiz questions list (1 for next, -1 for previous).
-
-        Note: Ensure that `st.session_state["question_index"]` is initialized before calling this method. This navigation method enhances the user experience by providing fluid access to quiz questions.
+        :param direction: An integer indicating the direction to move in the quiz questions list (1 for next, -1 for previous).
         """
-        ##### YOUR CODE HERE #####
         if "question_index" not in st.session_state:
             st.session_state["question_index"] = 0
         
         st.session_state["question_index"] = (st.session_state["question_index"] + direction) % self.total_questions
-    ##########################################################
 
 
 # Test Generating the Quiz
@@ -106,9 +92,7 @@ if __name__ == "__main__":
         with st.container():
             st.header("Generated Quiz Question: ")
             
-            # Task 9
-            ##########################################################
-            quiz_manager = QuizManager(question_bank)  # Use our new QuizManager class
+            quiz_manager = QuizManager(question_bank)  # Use QuizManager class
 
             # Initialize question_index in session state if not present
             if "question_index" not in st.session_state:
@@ -116,24 +100,18 @@ if __name__ == "__main__":
 
             # Format the question and display
             with st.form("Multiple Choice Question"):
-                ##### YOUR CODE HERE #####
                 index_question = quiz_manager.get_question_at_index(st.session_state["question_index"]) # Use the get_question_at_index method to set the 0th index
-                ##### YOUR CODE HERE #####
                 
                 # Unpack choices for radio
                 choices = []
                 for choice in index_question['choices']: # For loop unpack the data structure
-                    ##### YOUR CODE HERE #####
                     # Set the key from the index question 
                     key = choice["key"]
                     # Set the value from the index question
                     value = choice["value"]
-                    ##### YOUR CODE HERE #####
                     choices.append(f"{key}) {value}")
                 
-                ##### YOUR CODE HERE #####
                 # Display the question onto streamlit
-                ##### YOUR CODE HERE #####
                 st.write(index_question["question"])
                 
                 answer = st.radio( # Display the radio button with the choices
@@ -148,4 +126,3 @@ if __name__ == "__main__":
                         st.success("Correct!")
                     else:
                         st.error("Incorrect!")
-            ##########################################################
