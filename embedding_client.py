@@ -45,7 +45,7 @@ class EmbeddingClient:
 
 if __name__ == "__main__":
     model_name = "textembedding-gecko@003"
-    project = "gemini-quizify-423920"
+    project = "ADD-PROJECT-NAME-HERE"
     location = "us-central1"
 
 
