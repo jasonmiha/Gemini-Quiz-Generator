@@ -4,7 +4,7 @@ Gemini Quiz Generator is an AI-driven tool designed to dynamically generate quiz
 
 ## Introduction
 
-Gemini Quizify leverages advanced AI technology to create customized quizzes based on the content of uploaded documents. Whether you're a student looking to reinforce your knowledge or an educator aiming to create engaging assessments, Gemini Quizify provides an efficient and interactive solution.
+Gemini Quiz Generator leverages advanced AI technology to create customized quizzes based on the content of uploaded documents. Whether you're a student looking to reinforce your knowledge or an educator aiming to create engaging assessments, Gemini Quiz Generator provides an efficient and interactive solution.
 
 ## Features
 
