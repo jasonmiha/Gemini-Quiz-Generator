@@ -31,7 +31,7 @@ class QuizGenerator:
 
         self.vectorstore = vectorstore
         self.llm = None
-        self.question_bank = [] # Initialize the question bank to store questions
+        self.question_bank = [] # Initializes the question bank to store questions
         self.system_template = """
             You are a subject matter expert on the topic: {topic}
             
@@ -85,10 +85,10 @@ class QuizGenerator:
         
         from langchain_core.runnables import RunnablePassthrough, RunnableParallel
 
-        # Enable a Retriever
+        # Enables a Retriever
         retriever = self.vectorstore.get_retriever()
         
-        # Use the system template to create a PromptTemplate
+        # Uses the system template to create a PromptTemplate
         prompt = PromptTemplate.from_template(self.system_template)
         
         # RunnableParallel allows Retriever to get relevant documents
@@ -96,95 +96,69 @@ class QuizGenerator:
         setup_and_retrieval = RunnableParallel(
             {"context": retriever, "topic": RunnablePassthrough()}
         )
-        # Create a chain with the Retriever, PromptTemplate, and LLM
+        # Creates a chain with the Retriever, PromptTemplate, and LLM
         chain = setup_and_retrieval | prompt | self.llm 
 
-        # Invoke the chain with the topic as input
+        # Invokes the chain with the topic as input
         response = chain.invoke(self.topic)
         return response
 
     def generate_quiz(self) -> list:
         """
-        Task: Generate a list of unique quiz questions based on the specified topic and number of questions.
-
-        This method orchestrates the quiz generation process by utilizing the `generate_question_with_vectorstore` method to generate each question and the `validate_question` method to ensure its uniqueness before adding it to the quiz.
-
-        Steps:
-            1. Initialize an empty list to store the unique quiz questions.
-            2. Loop through the desired number of questions (`num_questions`), generating each question via `generate_question_with_vectorstore`.
-            3. For each generated question, validate its uniqueness using `validate_question`.
-            4. If the question is unique, add it to the quiz; if not, attempt to generate a new question (consider implementing a retry limit).
-            5. Return the compiled list of unique quiz questions.
+        Generates a list of unique quiz questions based on the specified topic and number of questions.
 
         Returns:
         - A list of dictionaries, where each dictionary represents a unique quiz question generated based on the topic.
-
-        Note: This method relies on `generate_question_with_vectorstore` for question generation and `validate_question` for ensuring question uniqueness. Ensure `question_bank` is properly initialized and managed.
         """
-        self.question_bank = [] # Reset the question bank
-        retry_limit = 3  # Set a retry limit for generating unique questions
+        self.question_bank = [] # Resets the question bank
+        retry_limit = 3  # Sets a retry limit for generating unique questions
 
         for _ in range(self.num_questions):
             retries = 0
             unique_question_generated = False
 
             while retries < retry_limit and not unique_question_generated:
-                question_str = self.generate_question_with_vectorstore()  # Use class method to generate question
+                question_str = self.generate_question_with_vectorstore()  # Uses class method to generate question
 
                 try:
-                    # Convert the JSON string to a dictionary
+                    # Converts the JSON string to a dictionary
                     question = json.loads(question_str)
                 except json.JSONDecodeError:
                     print("Failed to decode question JSON.")
                     retries += 1
-                    continue  # Skip this iteration if JSON decoding fails
+                    continue  # Skips this iteration if JSON decoding fails
 
-                # Validate the question using the validate_question method
+                # Validates the question using the validate_question method
                 if self.validate_question(question):
                     print("Successfully generated unique question")
-                    # Add the valid and unique question to the bank
+                    # Adds the valid and unique question to the bank
                     self.question_bank.append(question)
                     unique_question_generated = True
                 else:
                     print("Duplicate or invalid question detected.")
-                    retries += 1  # Increment retry count
+                    retries += 1  # Increments retry count
 
         return self.question_bank
 
     def validate_question(self, question: dict) -> bool:
         """
-        Task: Validate a quiz question for uniqueness within the generated quiz.
-
-        This method checks if the provided question (as a dictionary) is unique based on its text content compared to previously generated questions stored in `question_bank`. The goal is to ensure that no duplicate questions are added to the quiz.
-
-        Steps:
-            1. Extract the question text from the provided dictionary.
-            2. Iterate over the existing questions in `question_bank` and compare their texts to the current question's text.
-            3. If a duplicate is found, return False to indicate the question is not unique.
-            4. If no duplicates are found, return True, indicating the question is unique and can be added to the quiz.
+        Validates a quiz question for uniqueness within the generated quiz.
 
         Parameters:
         - question: A dictionary representing the generated quiz question, expected to contain at least a "question" key.
 
         Returns:
         - A boolean value: True if the question is unique, False otherwise.
-
-        Note: This method assumes `question` is a valid dictionary and `question_bank` has been properly initialized.
         """
-        ##### YOUR CODE HERE #####
-        # Consider missing 'question' key as invalid in the dict object
-        # Check if a question with the same text already exists in the self.question_bank
-        ##### YOUR CODE HERE #####
-        is_unique = False
 
         if "question" not in question:
-            is_unique = False
+            return False
+
         for existing_question in self.question_bank:
             if existing_question["question"] == question["question"]:
-                is_unique = False
-        is_unique = True
+                return False
 
-        return is_unique
+        return True
 
 
 # Test Generating the Quiz
@@ -202,7 +176,7 @@ if __name__ == "__main__":
         processor = DocumentProcessor()
         processor.ingest_documents()
     
-        embed_client = EmbeddingClient(**embed_config) # Initialize from Task 4
+        embed_client = EmbeddingClient(**embed_config) # Initialize Embedding Client
     
         chroma_creator = ChromaCollectionCreator(processor, embed_client)
     
