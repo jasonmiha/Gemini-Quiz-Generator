@@ -64,6 +64,8 @@ if __name__ == "__main__":
                     # Set the question_index to 0 in st.session_state
                     st.session_state['question_index'] = 0
 
+                    submitted = st.form_submit_button("Display Quiz")
+
     elif st.session_state["display_quiz"]:
         
         st.empty()
