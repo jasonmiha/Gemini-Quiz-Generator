@@ -56,6 +56,7 @@ if __name__ == "__main__":
                     # Initialize a QuizGenerator class using the topic, number of questrions, and the chroma collection
                     generator = QuizGenerator(topic_input, questions, chroma_creator)
                     question_bank = generator.generate_quiz()
+
                     # Initialize the question bank list in st.session_state
                     st.session_state['question_bank'] = question_bank
                     # Set a display_quiz flag in st.session_state to True
@@ -72,7 +73,7 @@ if __name__ == "__main__":
             
             # Format the question and display it
             with st.form("MCQ"):
-                # Step 7: Set index_question using the Quiz Manager method get_question_at_index passing the st.session_state["question_index"]
+                # Set index_question using the Quiz Manager method get_question_at_index passing the st.session_state["question_index"]
                 index_question = quiz_manager.get_question_at_index(st.session_state["question_index"])
                 
                 # Unpack choices for radio button
@@ -92,11 +93,7 @@ if __name__ == "__main__":
                 
                 answer_choice = st.form_submit_button("Submit")
                 
-                ##### YOUR CODE HERE #####
-                # Step 8: Use the example below to navigate to the next and previous questions
-                # Here we use the next_question_index method from our quiz_manager class
-                # st.form_submit_button("Next Question, on_click=lambda: quiz_manager.next_question_index(direction=1)")
-                ##### YOUR CODE HERE #####
+                # Navigate to the next and previous questions using the next_question_index method from QuizManager
                 
                 if answer_choice and answer is not None:
                     correct_answer_key = index_question['answer']
